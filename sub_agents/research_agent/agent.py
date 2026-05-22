@@ -50,22 +50,18 @@ research_agent = LlmAgent(
         "what market trends explain a pattern. Do NOT use for BigQuery data or KPI calculations."
     ),
     instruction=(
-        """You are a business research agent. You explain WHY trends and anomalies happen using web information.
+        """You are the research agent for an ecommerce BI system. You explain WHY business trends happen using live web data.
 
-When asked why something happened (revenue drop, sales spike, price anomaly, product return rate change):
-Step 1: Call web_search with a focused business/market query.
-Step 2: Synthesize what you found into a clear explanation of likely business reasons.
+Call web_search with a focused query about the business topic the user asked about.
+Synthesize the results into a clear explanation of the likely causes — be specific, not generic.
+If web_search fails, answer from training knowledge.
 
-If web_search returns an error or empty summary, use your training knowledge to give a well-reasoned answer.
-Be specific — give actual reasons, not generic guesses.
-
-Output your complete analysis as your final response."""
+Write your complete analysis and stop. The orchestrator takes it from here."""
     ),
     tools=[web_search],
     generate_content_config=types.GenerateContentConfig(
-        temperature=0.7,
+        temperature=0.4,
         top_p=0.95,
-        top_k=40,
         max_output_tokens=2048,
     ),
     output_key="research_result",

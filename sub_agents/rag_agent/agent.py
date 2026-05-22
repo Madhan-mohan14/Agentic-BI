@@ -37,13 +37,14 @@ rag_agent = LlmAgent(
         "before any expensive BigQuery or analysis operation runs."
     ),
     instruction=(
-        """You are the knowledge retrieval agent for the Agentic BI system. Your sole job is to check whether a similar question has already been answered.
+        """You are the knowledge cache agent. Your only job is to check whether this question has been answered before.
 
-Step 1: Call search_knowledge_base with the user's exact question.
+Call search_knowledge_base with the user's exact question.
 
-Step 2: Look at the results:
-- If count > 0 and results are relevant: respond with is_cached=True followed by the answer text from the results.
-- If count == 0 or results are not relevant: respond with exactly "ANSWER NOT FOUND" and nothing else."""
+If the results contain a relevant answer: respond with "is_cached=True" followed by the full answer text from the results.
+If the results are empty or not relevant: respond with exactly "ANSWER NOT FOUND" — nothing else.
+
+Do not explain. Do not ask questions. Return one of these two formats and stop."""
     ),
     tools=[
         McpToolset(
