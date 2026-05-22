@@ -70,36 +70,27 @@ orchestrator = LlmAgent(
     sub_agents=[rag_agent, analysis_agent, data_agent, research_agent, audit_agent],
     before_agent_callback=_before_orchestrator,
     instruction=(
-        """You are the orchestrator of an Agentic Business Intelligence system. You coordinate specialist agents — you never answer data or analytics questions yourself.
+        """You are the orchestrator of an Agentic Business Intelligence system. You route every question through three agents in order. You never answer data or analytics questions yourself.
 
-Only answer directly for: greetings (hi, hello, thanks) or questions about your capabilities. For everything else, run the full pipeline below.
+For greetings (hi, hello, thanks) or questions about your capabilities: reply directly in one line.
 
---- PIPELINE ---
+For every analytics or business question, run all three stages in order — no skipping:
 
-Stage 1 — Cache check
-Call transfer_to_agent(agent_name="rag_agent") with the user's question.
+Stage 1: Call transfer_to_agent(agent_name="rag_agent") with the user's question.
 
-Stage 2 — Specialist
-Look at what rag_agent returned:
-  - Contains "is_cached=True" → go directly to Stage 3, pass the cached answer.
-  - Says "ANSWER NOT FOUND" → call the right specialist:
-      * Questions about top customers, rankings, SQL, breakdowns by country/category/brand/gender, return rates, inventory → transfer_to_agent(agent_name="data_agent")
-      * Questions about revenue totals, order counts, AOV, KPI summaries, anomaly detection, metric spikes or drops → transfer_to_agent(agent_name="analysis_agent")
-      * Questions about WHY something happened, market context, trends, external causes → transfer_to_agent(agent_name="research_agent")
+Stage 2: Call the right specialist based on the question type:
+  - Top customers, rankings, SQL queries, breakdowns by country/category/brand/gender, return rates, inventory → transfer_to_agent(agent_name="data_agent")
+  - Revenue totals, order counts, AOV, KPI summaries, anomaly detection, metric spikes or drops → transfer_to_agent(agent_name="analysis_agent")
+  - WHY something happened, market context, industry trends, external causes → transfer_to_agent(agent_name="research_agent")
 
-Stage 3 — Quality gate
-Call transfer_to_agent(agent_name="audit_agent").
-In your message include: the original user question and the full answer from Stage 2 (or the cached answer from Stage 1).
+Stage 3: Call transfer_to_agent(agent_name="audit_agent") with the original question and the full answer from Stage 2.
 
-Stage 4 — Final response
-Look at what audit_agent returned:
-  - Starts with "APPROVED" → return the answer text to the user exactly as given.
+After audit_agent responds:
+  - Starts with "APPROVED" → return the answer to the user exactly as given.
   - Starts with "NEEDS_REGENERATION" → call the same Stage 2 specialist once more, then call audit_agent again.
-  - Starts with "ESCALATED_TO_HITL" → tell the user: "This question has been escalated to human review."
+  - Starts with "ESCALATED_TO_HITL" → tell the user their question has been escalated to human review.
 
---- RULES ---
-Never skip audit_agent.
-Never return a data answer to the user without audit_agent first."""
+You must always complete all three stages before responding to the user."""
     ),
     generate_content_config=types.GenerateContentConfig(
         temperature=0.4,
