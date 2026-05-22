@@ -1,0 +1,33 @@
+{
+  "name": "audit_agent",
+  "description": "Quality gate for Agentic BI answers. Scores every answer for factual accuracy, logs approved answers to the RAG corpus, and escalates low-quality answers to human review (HITL).",
+  "version": "1.0.0",
+  "url": "https://audit-agent-service-492257799932.us-central1.run.app",
+  "agentCardUrl": "https://audit-agent-service-492257799932.us-central1.run.app/.well-known/agent.json",
+  "capabilities": {
+    "streaming": false
+  },
+  "defaultInputModes": ["text/plain"],
+  "defaultOutputModes": ["text/plain"],
+  "skills": [
+    {
+      "id": "score_answer",
+      "name": "Score Answer",
+      "description": "Scores a BI answer for factual accuracy using Gemini. Returns a confidence score 0.0–1.0 and a passed flag (threshold 0.8).",
+      "tags": ["audit", "quality", "scoring", "gemini"]
+    },
+    {
+      "id": "log_to_corpus",
+      "name": "Log to Corpus",
+      "description": "Persists an approved BI answer to the Vertex AI RAG corpus so future identical queries are served from cache.",
+      "tags": ["rag", "corpus", "memory", "vertexai"]
+    },
+    {
+      "id": "escalate_hitl",
+      "name": "Escalate to HITL",
+      "description": "Tracks rejection count per session. On second rejection writes the query + result to Firestore hitl_queue for human review.",
+      "tags": ["hitl", "escalation", "human-review", "firestore"]
+    }
+  ],
+  "supportsAuthenticatedExtendedCard": false
+}

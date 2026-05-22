@@ -1,0 +1,23 @@
+# Secrets — never commit
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# MCP Toolbox binary
+toolbox.exe
+
+# ADK
+.adk/
+
+# Runtime state
+hitl_queue.json
+
+# Misc
+.DS_Store
+*.log

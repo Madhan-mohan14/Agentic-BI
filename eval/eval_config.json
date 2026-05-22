@@ -1,0 +1,11 @@
+{
+  "criteria": {
+    "tool_trajectory_avg_score": 0.8,
+    "response_match_score": 0.7
+  },
+  "metrics": [
+    "hallucinations_v1"
+  ],
+  "model": "gemini-2.5-flash",
+  "description": "Agentic BI evaluation config — hallucination scoring + tool trajectory checks"
+}

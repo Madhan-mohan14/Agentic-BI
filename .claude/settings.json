@@ -1,0 +1,25 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '✅ Build step done. Run /teach to get a learning recap of what was just built.'"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(python:*)",
+      "Bash(pip:*)",
+      "Bash(npx:*)",
+      "Bash(adk:*)",
+      "Bash(uvicorn:*)",
+      "Bash(gcloud:*)"
+    ]
+  }
+}

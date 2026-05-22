@@ -1,0 +1,14 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+.git/
+.claude/
+eval/
+hitl_queue.json
+*.jsonl
+deployment/
+agents/
+tools/tools.yaml

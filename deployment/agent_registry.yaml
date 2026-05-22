@@ -1,0 +1,44 @@
+registry:
+  name: agentic-bi-registry
+  project: agentic-bi-497010
+  description: "Central registry of all agents and tools in the Agentic BI platform"
+
+  agents:
+    - name: orchestrator
+      type: agent_engine
+      url: "agentengine://${AGENT_ENGINE_ID}"
+      description: "Root orchestrator — routes to sub-agents, applies 3-stage RAG→Specialist→Audit pipeline"
+
+    - name: audit-agent
+      type: a2a
+      url: "${AUDIT_A2A_URL}"
+      description: "Audit A2A service — scores answers, logs to RAG corpus, escalates HITL"
+      card: "${AUDIT_A2A_URL}/.well-known/agent.json"
+
+    - name: bi-tools-server
+      type: mcp
+      url: "${MCP_URL}"
+      description: "FastMCP server — 7 BigQuery + RAG tools"
+
+  tools:
+    - name: execute_sql
+      server: bi-tools-server
+      layer: 1-fastmcp
+    - name: detect_anomaly
+      server: bi-tools-server
+      layer: 1-fastmcp
+    - name: generate_kpi_summary
+      server: bi-tools-server
+      layer: 1-fastmcp
+    - name: create_report_job
+      server: bi-tools-server
+      layer: 1-fastmcp
+    - name: get_schema_context
+      server: bi-tools-server
+      layer: 1-fastmcp
+    - name: log_resolution
+      server: bi-tools-server
+      layer: 1-fastmcp
+    - name: search_knowledge_base
+      server: bi-tools-server
+      layer: 1-fastmcp

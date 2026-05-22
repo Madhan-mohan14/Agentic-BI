@@ -1,0 +1,57 @@
+{
+  "skill_name": "agentic-bi-skills",
+  "evals": [
+    {
+      "id": 1,
+      "skill": "adk-agent",
+      "prompt": "I need to write the orchestrator agent for my Agentic BI system. It should route to rag_agent first, then data_agent if no cache hit. Show me the full LlmAgent setup with sub_agents and the before_tool_callback that blocks bigquery_execute_sql if dataset arg is missing.",
+      "expected_output": "LlmAgent with sub_agents list starting with rag_agent, before_tool_callback that checks for dataset arg, async methods, proper imports from google.adk",
+      "assertions": [
+        {"id": "a1", "check": "Uses async def for callback", "type": "contains", "value": "async def before_tool_callback"},
+        {"id": "a2", "check": "sub_agents includes rag_agent first", "type": "contains", "value": "rag_agent"},
+        {"id": "a3", "check": "Checks for dataset arg in callback", "type": "contains", "value": "dataset"},
+        {"id": "a4", "check": "Returns None to allow, dict to block", "type": "contains", "value": "return None"}
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "skill": "mcp-builder",
+      "prompt": "Help me implement the detect_anomaly tool in bi_tools_server.py. It should take table, column, and threshold args, use a Pydantic return model, and run as an MCP server I can test with MCP Inspector.",
+      "expected_output": "FastMCP server with @mcp.tool() decorator, Pydantic AnomalyResult model, async def, docstring, and mcp.run() entrypoint",
+      "assertions": [
+        {"id": "b1", "check": "Has @mcp.tool() decorator", "type": "contains", "value": "@mcp.tool()"},
+        {"id": "b2", "check": "Return type is Pydantic model not dict", "type": "contains", "value": "BaseModel"},
+        {"id": "b3", "check": "Has mcp.run() entrypoint", "type": "contains", "value": "mcp.run()"},
+        {"id": "b4", "check": "Tool is async", "type": "contains", "value": "async def detect_anomaly"}
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "skill": "teaching-mode",
+      "prompt": "I just finished implementing the detect_anomaly FastMCP tool. Walk me through what was built and how it works.",
+      "expected_output": "Learning recap with: what was built in plain English, key decisions and why, data flow with arrows, specific runnable command to try now",
+      "assertions": [
+        {"id": "c1", "check": "Explains what FastMCP is in plain English", "type": "qualitative"},
+        {"id": "c2", "check": "Explains WHY @mcp.tool() decorator was used", "type": "qualitative"},
+        {"id": "c3", "check": "Shows data flow with arrows", "type": "contains", "value": "→"},
+        {"id": "c4", "check": "Gives exact runnable command (MCP Inspector)", "type": "contains", "value": "npx @modelcontextprotocol/inspector"}
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "skill": "mistake-tracker",
+      "prompt": "I just realized I wrote a sync def for before_tool_callback instead of async def. The callback isn't firing. Log this mistake and tell me how to fix it.",
+      "expected_output": "Logs to CLAUDE.md mistake table AND memory file, states the fix (async def), explains why ADK requires async",
+      "assertions": [
+        {"id": "d1", "check": "Logs to CLAUDE.md", "type": "qualitative"},
+        {"id": "d2", "check": "Logs to memory feedback_mistakes.md", "type": "qualitative"},
+        {"id": "d3", "check": "States the fix clearly", "type": "contains", "value": "async"},
+        {"id": "d4", "check": "Entry includes MISTAKE/FIX/AVOID format", "type": "qualitative"}
+      ],
+      "files": []
+    }
+  ]
+}

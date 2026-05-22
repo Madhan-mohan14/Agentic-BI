@@ -1,0 +1,46 @@
+{
+  "persona": "EXPERT",
+  "description": "A senior data analyst who knows SQL and BigQuery. Asks precise, technical questions with specific table and column names.",
+  "conversations": [
+    {
+      "name": "expert_anomaly_z_score",
+      "turns": [
+        {
+          "parts": [{"text": "Run a z-score anomaly check on the sale_price column in order_items with threshold 2.5"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "detect_anomaly"}
+          ],
+          "reference": "Z-score anomaly detection on order_items.sale_price with threshold 2.5."
+        }
+      ]
+    },
+    {
+      "name": "expert_revenue_by_country_join",
+      "turns": [
+        {
+          "parts": [{"text": "Show me total revenue and order count grouped by country, joining orders to users, only completed orders"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "get_schema_context"},
+            {"tool_name": "execute_sql"}
+          ],
+          "reference": "Revenue and order count by country from orders JOIN users WHERE status='Complete'."
+        }
+      ]
+    },
+    {
+      "name": "expert_weekly_trend",
+      "turns": [
+        {
+          "parts": [{"text": "Give me week-over-week revenue for the past 8 weeks with percentage change"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "generate_kpi_summary"}
+          ],
+          "reference": "Weekly revenue trend for 8 weeks with week-over-week delta."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "persona": "EVALUATOR",
+  "description": "A QA engineer stress-testing the agent with edge cases, ambiguous inputs, and adversarial questions to verify routing and hallucination guards.",
+  "conversations": [
+    {
+      "name": "evaluator_invalid_table",
+      "turns": [
+        {
+          "parts": [{"text": "Detect anomalies in the sales table"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "detect_anomaly"}
+          ],
+          "reference": "before_tool_callback corrects 'sales' to 'orders'. Anomaly detection runs on orders table."
+        }
+      ]
+    },
+    {
+      "name": "evaluator_cache_hit",
+      "turns": [
+        {
+          "parts": [{"text": "What are the KPIs for the last 30 days?"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"}
+          ],
+          "reference": "Cached result returned from knowledge base. No analysis_agent or BigQuery call."
+        }
+      ]
+    },
+    {
+      "name": "evaluator_ambiguous_why",
+      "turns": [
+        {
+          "parts": [{"text": "Why is this happening?"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "google_search"}
+          ],
+          "reference": "Research agent handles ambiguous why question with a general business context search."
+        }
+      ]
+    },
+    {
+      "name": "evaluator_pdf_export",
+      "turns": [
+        {
+          "parts": [{"text": "I need a PDF of today's top product report"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "create_report_job"}
+          ],
+          "reference": "create_report_job called with format=pdf. job_id returned."
+        }
+      ]
+    }
+  ]
+}

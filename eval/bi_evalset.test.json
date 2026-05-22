@@ -1,0 +1,272 @@
+[
+  {
+    "name": "kpi_summary_30_days",
+    "data": [
+      {
+        "query": "What are the KPIs for the last 30 days?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "generate_kpi_summary", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Revenue, orders, AOV, and items sold for the last 30 days from the thelook_ecommerce dataset."
+      }
+    ]
+  },
+  {
+    "name": "kpi_summary_7_days",
+    "data": [
+      {
+        "query": "Show me KPIs for the last 7 days",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "generate_kpi_summary", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Revenue, orders, AOV, and items sold for the last 7 days."
+      }
+    ]
+  },
+  {
+    "name": "anomaly_detection_order_items",
+    "data": [
+      {
+        "query": "Is there an anomaly in sale_price in the order_items table?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "detect_anomaly", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Anomaly detected with z-score approximately 3.56, affecting 34 rows above threshold 2.0."
+      }
+    ]
+  },
+  {
+    "name": "anomaly_detection_orders",
+    "data": [
+      {
+        "query": "Is there a revenue spike in the orders table?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "detect_anomaly", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Anomaly analysis on the orders table sale_price column with z-score threshold 2.0."
+      }
+    ]
+  },
+  {
+    "name": "top_customers_by_revenue",
+    "data": [
+      {
+        "query": "Show me the top 5 customers by total revenue",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "get_schema_context", "tool_input": {}},
+          {"tool_name": "execute_sql", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Top 5 customers by revenue from completed orders, grouped by email, filtered WHERE status = 'Complete'."
+      }
+    ]
+  },
+  {
+    "name": "top_customers_by_category",
+    "data": [
+      {
+        "query": "What are the top 5 product categories by revenue?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "get_schema_context", "tool_input": {}},
+          {"tool_name": "execute_sql", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Top product categories ranked by total revenue from the order_items and products tables."
+      }
+    ]
+  },
+  {
+    "name": "customer_breakdown_by_country",
+    "data": [
+      {
+        "query": "Show orders by country",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "get_schema_context", "tool_input": {}},
+          {"tool_name": "execute_sql", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Order count and revenue grouped by country from the users and orders tables."
+      }
+    ]
+  },
+  {
+    "name": "schema_first_enforced",
+    "data": [
+      {
+        "query": "What is the average order value by gender?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "get_schema_context", "tool_input": {}},
+          {"tool_name": "execute_sql", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Average order value segmented by customer gender from the thelook_ecommerce dataset."
+      }
+    ]
+  },
+  {
+    "name": "return_rate_analysis",
+    "data": [
+      {
+        "query": "What is the return rate for products?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "get_schema_context", "tool_input": {}},
+          {"tool_name": "execute_sql", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Return rate calculated as returned orders divided by total orders from order_items table."
+      }
+    ]
+  },
+  {
+    "name": "create_report_job",
+    "data": [
+      {
+        "query": "Export the KPI summary as a CSV",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "create_report_job", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Report job created with format=csv, job_id returned with estimated completion time."
+      }
+    ]
+  },
+  {
+    "name": "create_report_job_pdf",
+    "data": [
+      {
+        "query": "Generate a PDF report of the top customers",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "create_report_job", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "PDF report job created, job_id returned."
+      }
+    ]
+  },
+  {
+    "name": "why_revenue_dropped",
+    "data": [
+      {
+        "query": "Why might ecommerce revenue drop during Q1?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "web_search", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "External market context explaining seasonal ecommerce revenue patterns in Q1."
+      }
+    ]
+  },
+  {
+    "name": "why_anomaly_explanation",
+    "data": [
+      {
+        "query": "Why would there be a spike in sale prices?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "web_search", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Market context explaining possible reasons for sale price spikes in ecommerce data."
+      }
+    ]
+  },
+  {
+    "name": "log_resolution_after_approval",
+    "data": [
+      {
+        "query": "What were total orders last 30 days?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "generate_kpi_summary", "tool_input": {}},
+          {"tool_name": "log_to_corpus", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Total orders count for last 30 days, logged to knowledge base after audit approval."
+      }
+    ]
+  },
+  {
+    "name": "invalid_table_corrected",
+    "data": [
+      {
+        "query": "Detect anomalies in the sales table",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "detect_anomaly", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Anomaly detection runs on orders table (corrected from invalid 'sales' table name)."
+      }
+    ]
+  },
+  {
+    "name": "revenue_trend_weekly",
+    "data": [
+      {
+        "query": "Show me the revenue trend week over week for last 4 weeks",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "generate_kpi_summary", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Weekly revenue trend for the last 28 days from thelook_ecommerce orders."
+      }
+    ]
+  },
+  {
+    "name": "top_products_by_sales",
+    "data": [
+      {
+        "query": "What are the top 10 products by number of items sold?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "get_schema_context", "tool_input": {}},
+          {"tool_name": "execute_sql", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Top 10 products ranked by items sold count from order_items and products tables."
+      }
+    ]
+  },
+  {
+    "name": "inventory_anomaly",
+    "data": [
+      {
+        "query": "Are there any anomalies in inventory cost prices?",
+        "expected_tool_use": [
+          {"tool_name": "search_knowledge_base", "tool_input": {}},
+          {"tool_name": "detect_anomaly", "tool_input": {}}
+        ],
+        "expected_intermediate_agent_responses": [],
+        "reference": "Anomaly detection on the inventory_items table cost column."
+      }
+    ]
+  },
+  {
+    "name": "greet_no_agent_call",
+    "data": [
+      {
+        "query": "Hello, what can you help me with?",
+        "expected_tool_use": [],
+        "expected_intermediate_agent_responses": [],
+        "reference": "System introduction explaining the BI system capabilities without calling any agent."
+      }
+    ]
+  }
+]

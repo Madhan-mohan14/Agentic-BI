@@ -1,0 +1,43 @@
+{
+  "persona": "NOVICE",
+  "description": "A business user with no SQL or data engineering background. Asks simple, plain-English questions about sales and customers.",
+  "conversations": [
+    {
+      "name": "novice_kpi_question",
+      "turns": [
+        {
+          "parts": [{"text": "How did we do last month in terms of sales?"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "generate_kpi_summary"}
+          ],
+          "reference": "KPI summary with revenue, orders, AOV for last 30 days in plain English."
+        }
+      ]
+    },
+    {
+      "name": "novice_top_customers",
+      "turns": [
+        {
+          "parts": [{"text": "Who are our best customers?"}],
+          "expected_tool_use": [
+            {"tool_name": "search_knowledge_base"},
+            {"tool_name": "get_schema_context"},
+            {"tool_name": "execute_sql"}
+          ],
+          "reference": "Top customers by revenue from completed orders, listed by email."
+        }
+      ]
+    },
+    {
+      "name": "novice_greeting",
+      "turns": [
+        {
+          "parts": [{"text": "Hi, what can this system do for me?"}],
+          "expected_tool_use": [],
+          "reference": "System introduction without calling any agent."
+        }
+      ]
+    }
+  ]
+}

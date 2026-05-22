@@ -1,0 +1,34 @@
+apiVersion: agent-gateway/v1
+kind: RuntimePolicy
+metadata:
+  name: agentic-bi-policy
+  description: "Runtime policy for Agentic BI — rate limits, allowed tools, MCP + A2A routes"
+spec:
+  rateLimit:
+    requestsPerMinute: 60
+    burstAllowance: 10
+
+  allowedTools:
+    - execute_sql
+    - detect_anomaly
+    - generate_kpi_summary
+    - create_report_job
+    - get_schema_context
+    - log_resolution
+    - search_knowledge_base
+
+  a2aRoutes:
+    - name: audit-agent
+      url: "${AUDIT_A2A_URL}"
+      timeout: 30s
+
+  mcpRoutes:
+    - name: bi-tools-server
+      url: "${MCP_URL}"
+      timeout: 120s
+
+  security:
+    blockPromptInjection: true
+    allowedOrigins:
+      - "agentengine://${AGENT_ENGINE_ID}"
+      - "https://audit-agent-service-492257799932.us-central1.run.app"

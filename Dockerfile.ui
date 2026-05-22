@@ -1,0 +1,16 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+ENV PYTHONUNBUFFERED=1
+ENV GOOGLE_GENAI_USE_VERTEXAI=True
+
+EXPOSE 8080
+
+# Use shell form so AGENT_ENGINE_ID is expanded at runtime from Cloud Run env vars
+CMD ["sh", "-c", "if [ -n \"$AGENT_ENGINE_ID\" ]; then adk web --host 0.0.0.0 --port 8080 --session_service_uri=\"agentengine://${AGENT_ENGINE_ID}\"; else adk web --host 0.0.0.0 --port 8080; fi"]

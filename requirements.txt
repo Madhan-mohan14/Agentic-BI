@@ -1,0 +1,36 @@
+# Core ADK and agent framework
+google-adk[vertexai]==1.33.0
+google-genai>=1.0.0
+
+# FastMCP server (Layer 1)
+fastmcp>=0.9.0
+
+# MCP Toolbox for BigQuery (Layer 2)
+toolbox-adk
+
+# Google Cloud + Vertex AI
+google-cloud-aiplatform
+vertexai
+
+# Audit Agent (A2A server)
+uvicorn>=0.30.0
+httpx>=0.27.0
+a2a-sdk>=0.3.26,<0.4.0
+
+# Observability — OTel → Langfuse
+opentelemetry-sdk>=1.24.0
+opentelemetry-exporter-otlp>=1.24.0
+openinference-instrumentation-google-adk
+
+# Environment
+python-dotenv>=1.0.0
+
+# MCP Python SDK (for StdioServerParameters)
+mcp>=1.0.0
+
+# Firestore — stateless HITL queue for Cloud Run / Agent Engine
+google-cloud-firestore
+
+# Deployment utilities
+google-cloud-storage>=2.0.0
+pyyaml>=6.0.0
