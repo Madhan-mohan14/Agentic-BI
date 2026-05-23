@@ -42,7 +42,7 @@ def _load_audit_card(base_url: str) -> AgentCard:
 # ── Audit Agent — consumed from Cloud Run via A2A ────────────────────────────
 _AUDIT_A2A_URL = os.environ.get(
     "AUDIT_A2A_URL",
-    "https://audit-agent-service-492257799932.us-central1.run.app",
+    "https://your-audit-agent-service.us-central1.run.app",
 )
 audit_agent = RemoteA2aAgent(
     name="audit_agent",

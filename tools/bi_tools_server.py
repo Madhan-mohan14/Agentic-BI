@@ -14,7 +14,7 @@ load_dotenv()  # must be before _PROJECT so .env values are available
 logger = logging.getLogger(__name__)
 logging.basicConfig(format="[%(levelname)s]: %(message)s", level=logging.INFO)
 
-_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT", "agentic-bi-497010")
+_PROJECT = os.environ.get("GOOGLE_CLOUD_PROJECT", "")
 
 mcp = FastMCP("bi-tools-server")
 

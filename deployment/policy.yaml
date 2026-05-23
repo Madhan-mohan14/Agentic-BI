@@ -31,4 +31,4 @@ spec:
     blockPromptInjection: true
     allowedOrigins:
       - "agentengine://${AGENT_ENGINE_ID}"
-      - "https://audit-agent-service-492257799932.us-central1.run.app"
+      - "${AUDIT_A2A_URL}"

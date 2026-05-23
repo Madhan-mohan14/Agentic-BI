@@ -2,8 +2,8 @@
   "name": "audit_agent",
   "description": "Quality gate for Agentic BI answers. Scores every answer for factual accuracy, logs approved answers to the RAG corpus, and escalates low-quality answers to human review (HITL).",
   "version": "1.0.0",
-  "url": "https://audit-agent-service-492257799932.us-central1.run.app",
-  "agentCardUrl": "https://audit-agent-service-492257799932.us-central1.run.app/.well-known/agent.json",
+  "url": "${AUDIT_A2A_URL}",
+  "agentCardUrl": "${AUDIT_A2A_URL}/.well-known/agent.json",
   "capabilities": {
     "streaming": false
   },

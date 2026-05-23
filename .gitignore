@@ -1,9 +1,14 @@
-# Secrets — never commit
+# ── Secrets — NEVER commit ───────────────────────────────────────────────────
 .env
 *.env
+*_secret*
+*_credentials*
+service_account*.json
+gcp_key*.json
 
-# Python
+# ── Python ───────────────────────────────────────────────────────────────────
 venv/
+.venv/
 __pycache__/
 *.pyc
 *.pyo
@@ -12,22 +17,32 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+*.so
+.python-version
 
-# Claude Code internal files
+# ── Claude Code internals ────────────────────────────────────────────────────
 .claude/
+.gcloudignore
+CLAUDE.md
 
-# ADK internal files
+# ── ADK internals ────────────────────────────────────────────────────────────
 .adk/
+sessions.db
 
-# MCP Toolbox binary
+# ── MCP Toolbox binary + local config ────────────────────────────────────────
 toolbox.exe
 tools/tools.yaml
 
-# Runtime state
+# ── Runtime state ────────────────────────────────────────────────────────────
 hitl_queue.json
 deployment_metadata.json
-
-# Misc
-.DS_Store
-*.log
 uv.lock
+
+# ── Logs & eval output ───────────────────────────────────────────────────────
+*.log
+*.jsonl
+
+# ── OS ───────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

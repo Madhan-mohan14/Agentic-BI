@@ -69,6 +69,6 @@ Agent Engine (orchestrator)
                    → bi-tools-server (Cloud Run MCP — SSE/HTTP)
 ```
 
-Cloud Run services in `agentic-bi-497010`, `us-central1`:
+Cloud Run services in `$GOOGLE_CLOUD_PROJECT`, `us-central1`:
 - `bi-tools-server` — FastMCP 7 tools, BigQuery reads
 - `audit-agent-service` — A2A, score_answer, log_resolution, escalate_hitl

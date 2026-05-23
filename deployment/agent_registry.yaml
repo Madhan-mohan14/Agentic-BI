@@ -1,6 +1,6 @@
 registry:
   name: agentic-bi-registry
-  project: agentic-bi-497010
+  project: ${GOOGLE_CLOUD_PROJECT}
   description: "Central registry of all agents and tools in the Agentic BI platform"
 
   agents:

@@ -3,9 +3,9 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'gcr.io/agentic-bi-497010/a2ui:latest'
+      - 'gcr.io/$PROJECT_ID/a2ui:latest'
       - '-f'
       - 'Dockerfile.ui'
       - '.'
 images:
-  - 'gcr.io/agentic-bi-497010/a2ui:latest'
+  - 'gcr.io/$PROJECT_ID/a2ui:latest'
