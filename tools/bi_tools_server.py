@@ -503,9 +503,11 @@ async def search_knowledge_base(query: str) -> KBSearchResult:
             relevance = float(getattr(ctx, 'score', getattr(ctx, 'distance', 0.5)))
             matches.append(PastAnalysis(query=query, result=ctx.text, score=relevance))
 
+        logger.info(f"[search_knowledge_base] corpus={corpus_id[-20:]} query='{query[:60]}' hits={len(matches)}")
         return KBSearchResult(results=matches, count=len(matches))
     except Exception as e:
-        logger.error(f"[search_knowledge_base] RAG search error: {e}")
+        import traceback
+        logger.error(f"[search_knowledge_base] RAG search error: {e}\n{traceback.format_exc()}")
         return KBSearchResult(results=[], count=0)
 
 

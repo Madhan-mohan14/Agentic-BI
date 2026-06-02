@@ -146,6 +146,49 @@ Query hits rag_agent
 
 Over time, the RAG corpus accumulates approved answers. Common questions stop hitting BigQuery entirely. The system gets faster and cheaper at scale — without any retraining.
 
+### How the 24-Hour TTL Works
+
+The cache isn't just "did we find a result?" — it's **"is that result fresh enough to trust?"**
+
+Every approved answer written to the corpus starts with a timestamp line:
+
+```
+Logged: 2026-06-02
+Query: what are the KPIs for the last 9 days
+
+Approved Analysis:
+Revenue $142,381, Orders 1,204, AOV $118.26...
+
+Score: 0.95
+```
+
+> **Where the stamp is written:** `audit_agent/agent.py` line 104 (`log_to_corpus`) and `tools/bi_tools_server.py` (`log_resolution`). Both use `f"Logged: {datetime.date.today().isoformat()}\n..."`.
+
+After `search_knowledge_base` returns, `after_tool_callback` in `tools/callbacks.py` (lines 117–139) scans every result for this stamp:
+
+```python
+re.search(r"Logged: (\d{4}-\d{2}-\d{2})", text)
+```
+
+- **Any result with today's date** → `all_stale = False` → cache hit, answer returned immediately.
+- **All results older than 24 hours (or no stamp)** → `all_stale = True` → `cache_miss = True` overrides the response, `rag_agent` outputs `ANSWER NOT FOUND`, orchestrator calls the specialist.
+
+```
+search_knowledge_base returns N results
+         │
+         ▼
+  after_tool_callback: scan each result for "Logged: YYYY-MM-DD"
+         │
+         ├── Any result with today's date? ──→ CACHE HIT  → answer returned
+         │
+         └── All stale or no stamp? ──────→ override count=0 → CACHE MISS
+                       │
+                       └── specialist agent → audit → log_to_corpus
+                                 (fresh stamp written) → next query HITS
+```
+
+> **Why 24 hours?** BI metrics (revenue, orders, AOV) shift daily. A cached "KPIs for last 7 days" answer from yesterday is already wrong — the time window has moved. The 1-day TTL ensures every result was computed within the current calendar day.
+
 ---
 
 ## 📊 Evaluation — Not an Afterthought
@@ -285,9 +328,13 @@ adk eval eval/bi_evalset.test.json --config eval/eval_config.json
 
 ### MCP Server → Cloud Run
 ```bash
+# --source . (repo root) is required — Dockerfile lives there, not in tools/
+# --allow-unauthenticated is required — McpToolset makes plain HTTP requests
+#   without Google identity tokens; omitting this returns 401 → RAG cache always misses
 gcloud run deploy bi-tools-server \
-  --source tools/ \
+  --source . \
   --region us-central1 \
+  --allow-unauthenticated \
   --set-env-vars GOOGLE_CLOUD_PROJECT=$PROJECT_ID
 ```
 
@@ -311,6 +358,60 @@ cd deployment/terraform/single-project
 cp vars/env.tfvars.example vars/env.tfvars   # fill in project_id
 terraform init && terraform apply
 ```
+
+---
+
+## 📡 BigQuery Analytics Plugin — Observability for Every Tool Call
+
+The `BigQueryAnalyticsPlugin` (in `tools/plugin.py`, lines 162–313) is an ADK plugin registered on the orchestrator that **writes every tool call — success and error — to BigQuery** automatically, with no changes needed in agent code.
+
+**What it captures per call:**
+
+| Column | Type | Example |
+|--------|------|---------|
+| `event_time` | TIMESTAMP | `2026-06-02T14:33:01Z` |
+| `session_id` | STRING | `abc123` |
+| `tool_name` | STRING | `generate_kpi_summary` |
+| `layer` | STRING | `MCP` / `TOOLBOX` / `BUILTIN` / `SUB_AGENT` |
+| `latency_ms` | INTEGER | `312` |
+| `success` | BOOL | `true` |
+| `error_msg` | STRING | `null` or first 500 chars of exception |
+| `args_keys` | STRING | `metrics,days` |
+
+**The dataset and table are auto-created** on first use (`agent_analytics.tool_events`). No manual setup required. The plugin uses `before_tool_call` to record a start timestamp and `after_tool_call` / `on_tool_error` to compute latency and write the row.
+
+**How it's used:**
+
+```python
+# orchestrator/agent.py line 215
+app = App(
+    root_agent=root_agent,
+    plugins=[BIAgentPlugin(), BigQueryAnalyticsPlugin()],
+)
+```
+
+**Querying the data (standard SQL on BigQuery):**
+
+```sql
+-- Find slow tools (> 2 seconds) in the last 7 days
+SELECT tool_name, layer, AVG(latency_ms) AS avg_ms, COUNT(*) AS calls
+FROM `your-project.agent_analytics.tool_events`
+WHERE event_time > TIMESTAMP_SUB(CURRENT_TIMESTAMP(), INTERVAL 7 DAY)
+  AND success = TRUE
+GROUP BY 1, 2
+ORDER BY avg_ms DESC;
+
+-- Find all failed calls
+SELECT event_time, session_id, tool_name, error_msg
+FROM `your-project.agent_analytics.tool_events`
+WHERE success = FALSE
+ORDER BY event_time DESC
+LIMIT 50;
+```
+
+**The GOVERN + OPTIMIZE loop:** `eval/optimize.py` queries this table weekly for sessions with audit scores < 0.7, clusters them by `tool_name` and `args_keys`, and generates targeted prompt patches. This closes the loop between production behavior and model improvement — no manual log-scanning required.
+
+> **Note:** `BigQueryAnalyticsPlugin` is separate from `BIAgentPlugin`. `BIAgentPlugin` handles *infrastructure failures* (timeouts, quota errors, downed services). `BigQueryAnalyticsPlugin` handles *observability* — it writes telemetry and never interferes with agent logic.
 
 ---
 

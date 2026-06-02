@@ -226,6 +226,8 @@ class BigQueryAnalyticsPlugin(BasePlugin):
             logger.warning("[bq_analytics] init failed (%s) — events will log-only", exc)
 
     def _write_row(self, row: dict) -> None:
+        if not self._table_ready and self._project:
+            self._init_bq()
         if not self._table_ready or self._bq is None:
             return
         try:

@@ -100,7 +100,8 @@ async def log_to_corpus(query: str, result: str, score: float) -> dict:
         location = os.environ.get("GOOGLE_CLOUD_LOCATION", "us-central1")
         vertexai.init(project=project, location=location)
 
-        content = f"Query: {query}\n\nApproved Analysis:\n{result}\n\nScore: {score}\n"
+        import datetime as _dt
+        content = f"Logged: {_dt.date.today().isoformat()}\nQuery: {query}\n\nApproved Analysis:\n{result}\n\nScore: {score}\n"
         with tempfile.NamedTemporaryFile(
             mode="w", suffix=".txt", delete=False, encoding="utf-8"
         ) as tmp:
