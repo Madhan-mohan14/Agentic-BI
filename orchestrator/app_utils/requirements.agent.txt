@@ -1,0 +1,31 @@
+# Agent Runtime container dependencies.
+#
+# Rules:
+#   - List only packages the agent code directly imports.
+#   - No version pins EXCEPT google-adk and a2a-sdk (they must stay in sync — see below).
+#   - pip on the Linux build server resolves all transitive deps from scratch.
+#
+# google-adk: pinned to 1.x — 2.x changed the a2a.client API (ClientEvent) and breaks our code.
+# a2a-sdk:    pinned to 0.3.x — must match the A2A API version google-adk 1.x imports.
+# To upgrade either: test locally first, then bump both bounds together.
+#
+# NEVER ADD:
+#   fastmcp, starlette, sse-starlette, uvicorn  — MCP server only; runs on Cloud Run, not here
+#   pywin32, pywinpty, pyreadline3              — Windows-only, no Linux wheel
+#   toolbox-adk, toolbox-core                  — not imported; causes pip resolution storm
+#
+# ADD a package only when agent code gains a new import.
+
+google-adk>=1.33.0,<2.0.0
+a2a-sdk>=0.3.26,<0.4.0
+google-cloud-bigquery
+google-cloud-aiplatform[rag]
+vertexai
+python-dotenv
+pydantic
+opentelemetry-api
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-http
+langfuse
+openinference-instrumentation-google-adk
+google-cloud-logging

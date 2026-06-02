@@ -92,8 +92,11 @@ async def after_tool_callback(
     if tool.name == "search_knowledge_base":
         # McpToolset wraps the response as {'content': [{'type': 'text', 'text': '<json>'}]}
         # Parse the nested JSON to get the actual count.
+        import datetime as _dt
         import json as _json
+        import re as _re
         count = tool_response.get("count", None)
+        parsed = None
         if count is None:
             content_list = tool_response.get("content", [])
             if content_list and isinstance(content_list[0], dict) and content_list[0].get("type") == "text":
@@ -110,6 +113,29 @@ async def after_tool_callback(
                 "count": 0,
                 "cache_miss": True,
                 "action": "No past analyses found. Proceed to Data Agent for a fresh query.",
+            }
+        # 24hr TTL: if every result lacks a fresh "Logged: YYYY-MM-DD" stamp, treat as miss
+        if parsed is None:
+            parsed = tool_response
+        today = _dt.date.today()
+        all_stale = True
+        for item in parsed.get("results", []):
+            text = item.get("result", "") if isinstance(item, dict) else str(item)
+            m = _re.search(r"Logged: (\d{4}-\d{2}-\d{2})", text)
+            if m:
+                try:
+                    logged = _dt.date.fromisoformat(m.group(1))
+                    if (today - logged).days < 1:
+                        all_stale = False
+                        break
+                except ValueError:
+                    pass
+        if all_stale:
+            return {
+                "results": [],
+                "count": 0,
+                "cache_miss": True,
+                "action": "Cached analyses are older than 24 hours. Proceed to Data Agent for a fresh query.",
             }
 
     # Rule 4: track user output format preference in session state

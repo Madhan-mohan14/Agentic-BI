@@ -74,25 +74,10 @@ def main() -> None:
 
     cfg = read_project_config(find_project_root())
 
-    req_file = "orchestrator/app_utils/.requirements.txt"
-    if not os.path.exists(req_file):
-        import subprocess  # noqa: PLC0415
-        os.makedirs(os.path.dirname(req_file), exist_ok=True)
-        # Use uv pip freeze (not uv export --locked) — captures ALL installed packages,
-        # including those installed via `uv pip install` outside pyproject.toml (e.g. a2a-sdk, google-adk).
-        # Strip Windows-only packages that have no Linux distribution (Agent Runtime runs Linux).
-        _WIN_ONLY = {"pywin32", "pywin32-ctypes", "pywinpty", "pyreadline3", "pyreadline"}
-        result = subprocess.run(
-            ["uv", "pip", "freeze"],
-            capture_output=True, text=True, check=True,
-        )
-        lines = [
-            l for l in result.stdout.splitlines()
-            if not any(l.lower().startswith(pkg) for pkg in _WIN_ONLY)
-        ]
-        with open(req_file, "w", encoding="utf-8") as f:
-            f.write("\n".join(lines) + "\n")
-        print(f"Requirements written to {req_file}")
+    # Static minimal requirements — only direct deps our agent code imports.
+    # No exact version pins so pip on the build server resolves a clean compatible set.
+    # Add packages here when new imports are added; never add MCP server packages.
+    req_file = "orchestrator/app_utils/requirements.agent.txt"
 
     deploy_agent_runtime(
         cfg=cfg,

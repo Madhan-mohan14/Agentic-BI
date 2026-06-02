@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import logging
 import os
 import statistics
@@ -434,7 +435,7 @@ async def log_resolution(query: str, result: str, score: float) -> LogResult:
         location = os.environ.get("GOOGLE_CLOUD_LOCATION", "us-central1")
         vertexai.init(project=_PROJECT, location=location)
 
-        content = f"Query: {query}\n\nApproved Analysis:\n{result}\n\nScore: {score}\n"
+        content = f"Logged: {datetime.date.today().isoformat()}\nQuery: {query}\n\nApproved Analysis:\n{result}\n\nScore: {score}\n"
         with tempfile.NamedTemporaryFile(mode='w', suffix=".txt", delete=False, encoding="utf-8") as tmp:
             tmp.write(content)
             tmp_path = tmp.name

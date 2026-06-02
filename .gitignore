@@ -50,3 +50,6 @@ uv.lock
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Auto-generated deploy artifacts
+orchestrator/app_utils/.requirements.txt
