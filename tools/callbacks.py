@@ -90,7 +90,21 @@ async def after_tool_callback(
 
     # Rule 3: RAG cache miss → tell agent to proceed to BigQuery
     if tool.name == "search_knowledge_base":
-        if tool_response.get("count", 0) == 0:
+        # McpToolset wraps the response as {'content': [{'type': 'text', 'text': '<json>'}]}
+        # Parse the nested JSON to get the actual count.
+        import json as _json
+        count = tool_response.get("count", None)
+        if count is None:
+            content_list = tool_response.get("content", [])
+            if content_list and isinstance(content_list[0], dict) and content_list[0].get("type") == "text":
+                try:
+                    parsed = _json.loads(content_list[0]["text"])
+                    count = parsed.get("count", 0)
+                except Exception:
+                    count = 0
+            else:
+                count = 0
+        if count == 0:
             return {
                 "results": [],
                 "count": 0,

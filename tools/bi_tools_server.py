@@ -499,7 +499,7 @@ async def search_knowledge_base(query: str) -> KBSearchResult:
 
         matches = []
         for ctx in response.contexts.contexts:
-            relevance = max(0.0, 1.0 - getattr(ctx, 'distance', 0.5))
+            relevance = float(getattr(ctx, 'score', getattr(ctx, 'distance', 0.5)))
             matches.append(PastAnalysis(query=query, result=ctx.text, score=relevance))
 
         return KBSearchResult(results=matches, count=len(matches))

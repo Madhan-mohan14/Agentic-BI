@@ -4,7 +4,7 @@ import re
 import sys
 
 import httpx
-from a2a.types import AgentCard
+from a2a.types import AgentCapabilities, AgentCard, AgentSkill
 from dotenv import load_dotenv
 from google.adk.agents import LlmAgent
 from google.adk.agents.remote_a2a_agent import RemoteA2aAgent
@@ -58,7 +58,16 @@ def _load_audit_card(base_url: str) -> AgentCard:
         return card
     except Exception as exc:
         print(f"[orchestrator] audit card prefetch failed ({exc}), using minimal card", file=sys.stderr)
-        return AgentCard(name="audit_agent", url=f"{base_url}/", version="1.0.0")
+        return AgentCard(
+            name="audit_agent",
+            url=f"{base_url}/",
+            version="1.0.0",
+            description="Audit and scoring agent for BI query validation.",
+            capabilities=AgentCapabilities(),
+            default_input_modes=["text/plain"],
+            default_output_modes=["text/plain"],
+            skills=[AgentSkill(id="audit", name="audit", description="Score and log BI query results.", tags=["audit", "scoring"])],
+        )
 
 
 # ── Audit Agent — consumed from Cloud Run via A2A ────────────────────────────

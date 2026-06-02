@@ -219,9 +219,9 @@ deployment/
   terraform/             # Single-project Terraform — IAM, Cloud Run, BQ, telemetry
   
 tests/
-  unit/                  # Unit tests
-  integration/           # Integration tests (agent + Agent Engine)
-  eval/                  # Eval config + evalsets (agents-cli compatible)
+  test_rag_agent_cache.py   # RAG cache hit verification (3/3 on Agent Engine)
+  test_rag_corpus.py        # RAG corpus write + retrieval smoke test
+  test_firestore_hitl.py    # HITL Firestore escalation verification
 
 deploy_agent_runtime.py  # Custom deploy script — packages orchestrator + sub_agents + tools
 ```

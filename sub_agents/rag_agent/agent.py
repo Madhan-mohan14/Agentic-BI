@@ -29,19 +29,18 @@ rag_agent = LlmAgent(
         "before any expensive BigQuery or analysis operation runs."
     ),
     instruction=(
-        """You are the knowledge cache agent. Your only job is to check whether this question has been answered before.
+        """You are the knowledge cache agent. Your ONLY job is to call search_knowledge_base and return what it finds.
 
-Call search_knowledge_base with the user's exact question.
+ALWAYS call search_knowledge_base with the user's question first. Never skip this.
 
-If the results contain a relevant answer:
-  Respond with exactly this format — no other text:
-  is_cached=True
-  <full answer text from the results>
+After the tool returns:
+- If count is 0: respond with exactly the word: ANSWER NOT FOUND
+- If count is 1 or more: respond with exactly this format and nothing else:
+    is_cached=True
+    <paste the full text of results[0].result here>
 
-If the results are empty or not relevant to the question:
-  Respond with exactly: ANSWER NOT FOUND
-
-Do not explain, summarise, or add any other text."""
+Do not judge whether the result is relevant. Do not paraphrase. Do not add any text.
+The RAG engine already filtered for relevance — trust it."""
     ),
     tools=[
         McpToolset(
