@@ -416,7 +416,6 @@ LIMIT 50;
 | Agent Platform | [Gemini Enterprise Agent Platform](https://cloud.google.com/gemini-enterprise) — Vertex AI Agent Engine |
 | LLM | Gemini 2.5 Flash |
 | MCP Layer 1 | [FastMCP](https://github.com/jlowin/fastmcp) — custom 7-tool server |
-| MCP Layer 2 | [MCP Toolbox for Databases](https://github.com/googleapis/mcp-toolbox-for-databases) |
 | MCP Layer 3 | ADK built-in `google_search` |
 | Agent Protocol | [A2A Protocol](https://google.github.io/adk-docs/a2a) — audit agent as remote microservice |
 | Data | BigQuery public dataset (`thelook_ecommerce`) |
