@@ -72,7 +72,7 @@ User NL → orchestrator → rag_agent (cache check)
 
 ---
 
-## 🧩 Three Layers of MCP — All in One Project
+## 🧩 TWO Layers of MCP — All in One Project
 
 This project is one of the few public examples that implements **all three MCP patterns simultaneously**:
 
@@ -89,11 +89,8 @@ This project is one of the few public examples that implements **all three MCP p
 | `log_resolution` | Uploads approved answers to Vertex AI RAG corpus |
 | `search_knowledge_base` | Semantic retrieval — top-3 results from the RAG corpus |
 
-### Layer 2 — MCP Toolbox for Databases (prebuilt)
-3 BigQuery-native tools served by [MCP Toolbox](https://github.com/googleapis/mcp-toolbox-for-databases) — zero SQL boilerplate:
-`get_top_products` · `get_revenue_by_period` · `get_inventory_anomalies`
 
-### Layer 3 — ADK Built-in Tools (zero config)
+### Layer 2— ADK Built-in Tools (zero config)
 `google_search` — wired directly into `research_agent` with no MCP setup required. The ADK handles auth, retries, and grounding.
 
 ---
