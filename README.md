@@ -439,7 +439,7 @@ Most "multi-agent" demos are wrappers. They call one LLM, maybe two, and label i
 
 **Real quality control** — a dedicated agent scores every answer before the user sees it, using the same model (Gemini) that produced it, acting as an independent judge.
 
-**Real MCP** — not just calling APIs. A proper MCP server with schema enforcement, transport configuration, and three distinct integration layers.
+**Real MCP** — not just calling APIs. A proper MCP server with schema enforcement, transport configuration, .
 
 **Real A2A** — the audit agent exposes a proper agent card and is consumed over HTTP by the orchestrator. Swap it for any other A2A-compatible agent without changing the orchestrator.
 
