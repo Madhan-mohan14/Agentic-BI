@@ -24,7 +24,6 @@ A self-improving, quality-gated BI assistant that routes natural-language busine
 This isn't a chatbot wrapper around an LLM. This is a **production-grade agentic system** that demonstrates every layer of modern AI engineering:
 
 - **Writes its own MCP tools** from scratch using FastMCP — a full 7-tool Model Context Protocol server
-- **Consumes prebuilt MCP tools** via MCP Toolbox for Databases (BigQuery Layer 2)
 - **Uses ADK's built-in tools** — Google Search grounded directly into a sub-agent
 - **Implements the A2A protocol** — the audit agent runs as a standalone A2A microservice on Cloud Run, consumed remotely by the orchestrator
 - **Deploys to Vertex AI Agent Engine** — the orchestrator lives in managed infrastructure with persistent session state
