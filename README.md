@@ -70,9 +70,7 @@ User NL → orchestrator → rag_agent (cache check)
 
 ---
 
-## 🧩 TWO Layers of MCP — All in One Project
-
-This project is one of the few public examples that implements **all three MCP patterns simultaneously**:
+## 🧩 Two Layers of MCP — Custom + Built-in
 
 ### Layer 1 — Custom FastMCP Server (written from scratch)
 7 tools built with [FastMCP](https://github.com/jlowin/fastmcp), served over streamable-HTTP on Cloud Run:
@@ -88,7 +86,7 @@ This project is one of the few public examples that implements **all three MCP p
 | `search_knowledge_base` | Semantic retrieval — top-3 results from the RAG corpus |
 
 
-### Layer 2— ADK Built-in Tools (zero config)
+### Layer 2 — ADK Built-in Tools (zero config)
 `google_search` — wired directly into `research_agent` with no MCP setup required. The ADK handles auth, retries, and grounding.
 
 ---
