@@ -29,7 +29,6 @@ This isn't a chatbot wrapper around an LLM. This is a **production-grade agentic
 - **Deploys to Vertex AI Agent Engine** — the orchestrator lives in managed infrastructure with persistent session state
 - **Self-improves** — every approved answer is written back to a Vertex AI RAG corpus; future identical questions skip BigQuery entirely
 
-Built as **Project 3** for a Google Cloud Next '26 Agentic AI portfolio, covering all **4 pillars: Build · Scale · Govern · Optimize**.
 
 ---
 
